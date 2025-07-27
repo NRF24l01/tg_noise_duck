@@ -3,15 +3,35 @@ from asyncio import Queue, create_task
 from asyncio import run, sleep
 from time import time
 from config import HOST, PORT, API_KEY
+from random import choice
 
 class Duck(Client):
     def __init__(self, logger):
         super().__init__(logger)
         
     async def process_message(self, message_type: int, payload: dict, config: dict):
+        target_channel = config.get("target_channel", None)
+        reactions = config.get("reactions", {})
+        chat_id = payload["chat_id"]
+        if not target_channel: 
+            self.logger.debug("No target channel specified, skipping message processing.")
+            return
+        if not (type(reactions) is dict and len(reactions.keys()) != 0):
+            self.logger.debug("No reactions specified, skipping message processing.")
+            return
         if message_type == 1:
             self.logger.debug(f"Received message: {payload}")
+            answer = self.get_answer(payload.get("message", ""), reactions)
+            if answer:
+                await self.send_message(chat_id, answer)
+                self.logger.debug(f"Sent answer: {answer} to chat: {chat_id}")
 
+    def get_answer(self, message: str, reactions: dict):
+        for keyword, response in reactions.items():
+            if keyword.lower() in message.lower():
+                return choice(response)
+        return None
+        
     def get_loop(self):
         import asyncio
         return asyncio.get_running_loop()
