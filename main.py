@@ -1,7 +1,5 @@
 from modules import Client, Logger
-from asyncio import Queue, create_task
-from asyncio import run, sleep
-from time import time
+from asyncio import run
 from config import HOST, PORT, API_KEY
 from random import choice
 
