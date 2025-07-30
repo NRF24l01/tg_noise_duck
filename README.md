@@ -1,5 +1,7 @@
 # TG noise duck
 
+Module for [tg core worker]()
+
 Base config:
 ```json
 {
