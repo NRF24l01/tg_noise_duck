@@ -23,7 +23,7 @@ class Duck(Client):
             self.logger.debug(f"Received message: {payload}")
             answer = self.get_answer(payload.get("message", ""), reactions)
             if answer:
-                await self.send_message(chat_id, answer)
+                await self.send_message(chat_id, answer, reply_to=payload["msg_id"])
                 self.logger.debug(f"Sent answer: {answer} to chat: {chat_id}")
 
     def get_answer(self, message: str, reactions: dict):
