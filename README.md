@@ -1,6 +1,6 @@
 # TG noise duck
 
-Module for [tg core worker]()
+Module for [tg core worker](https://github.com/NRF24l01/tg_core_automize)
 
 Base config:
 ```json
