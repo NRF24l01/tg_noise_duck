@@ -19,6 +19,9 @@ class Duck(Client):
             return
         if message_type == 1:
             self.logger.debug(f"Received message: {payload}")
+            if payload.get("sender").get("type") != "channel" or payload.get("sender").get("id") != target_channel:
+                self.logger.debug(f"Message not from target channel, {payload.get('sender').get('id')}!={target_channel}, skipping.")
+                return
             answer = self.get_answer(payload.get("message", ""), reactions)
             if answer:
                 await self.send_message(chat_id, answer, reply_to=payload["msg_id"])
